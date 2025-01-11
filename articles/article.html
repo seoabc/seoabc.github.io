@@ -448,7 +448,6 @@
                     throw new Error('未指定文章');
                 }
 
-                // 从 GitHub API 获取文章内容
                 const response = await fetch(
                     `https://api.github.com/repos/${config.owner}/${config.repo}/contents/articles/${fileName}`
                 );
@@ -458,17 +457,25 @@
                 }
 
                 const data = await response.json();
-                console.log('获取到文章数据:', data);
                 const content = decodeURIComponent(escape(atob(data.content)));
-                console.log('解码后的文章内容:', content);
-
+                
+                // 调试输出
+                console.log('原始内容:', content);
+                
                 // 解析 YAML front matter
-                const matches = content.match(/^---([\s\S]*?)---\n([\s\S]*)$/);
+                const matches = content.match(/^---([\s\S]*?)---/);
                 if (!matches) {
                     throw new Error('无效的文章格式');
                 }
 
-                const [, frontMatter, markdown] = matches;
+                // 分离 front matter 和正文
+                const frontMatter = matches[1];
+                const markdown = content.slice(matches[0].length).trim();
+                
+                // 调试输出
+                console.log('Front Matter:', frontMatter);
+                console.log('Markdown:', markdown);
+
                 const metadata = {};
                 frontMatter.split('\n').forEach(line => {
                     if (line.trim()) {
@@ -481,18 +488,21 @@
                     }
                 });
 
+                // 调试输出
+                console.log('解析后的元数据:', metadata);
+
                 // 更新页面标题和元数据
                 document.title = `${metadata.title} - SEO优化最佳实践-SEOABC`;
                 document.getElementById('current-article-title').textContent = metadata.title;
                 document.getElementById('article-title').textContent = metadata.title;
-                document.getElementById('meta-description').content = metadata.description;
+                document.getElementById('meta-description').content = metadata.description || '';
                 document.getElementById('og-title').content = metadata.title;
-                document.getElementById('og-description').content = metadata.description;
-                document.getElementById('article-author').textContent = metadata.author;
-                document.getElementById('publish-date').textContent = metadata.date;
-                document.getElementById('article-views').textContent = metadata.views || 0;
-                document.getElementById('article-likes').textContent = metadata.likes || 0;
-                document.getElementById('article-comments').textContent = metadata.comments || 0;
+                document.getElementById('og-description').content = metadata.description || '';
+                document.getElementById('article-author').textContent = metadata.author || '博主';
+                document.getElementById('publish-date').textContent = metadata.date || '';
+                document.getElementById('article-views').textContent = metadata.views || '0';
+                document.getElementById('article-likes').textContent = metadata.likes || '0';
+                document.getElementById('article-comments').textContent = metadata.comments || '0';
 
                 // 只在有封面图时显示封面
                 const coverElement = document.getElementById('article-cover');
@@ -508,10 +518,12 @@
                 document.getElementById('article-content').innerHTML = articleContent;
 
                 // 渲染文章标签
-                document.getElementById('article-tags').innerHTML = metadata.tags
-                    .split(',')
-                    .map(tag => `<span class="tag">${tag.trim()}</span>`)
-                    .join('');
+                if (metadata.tags) {
+                    document.getElementById('article-tags').innerHTML = metadata.tags
+                        .split(',')
+                        .map(tag => `<span class="tag">${tag.trim()}</span>`)
+                        .join('');
+                }
 
                 // 获取所有文章用于导航
                 const allArticles = await getAllArticles();
