@@ -135,5 +135,46 @@
             <a href="/about.html">关于我</a>
         </div>
     </footer>
+
+    <script>
+        async function loadLatestArticles() {
+            try {
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.owner}/${config.repo}/contents/articles`
+                );
+                
+                if (!response.ok) throw new Error('Failed to load articles');
+                
+                const files = await response.json();
+                const articles = files
+                    .filter(file => file.name.endsWith('.md'))
+                    .sort((a, b) => b.name.localeCompare(a.name))
+                    .slice(0, 5); // 只显示最新的5篇文章
+                
+                const articlesList = document.querySelector('.article-list');
+                articlesList.innerHTML = '';
+                
+                for (const article of articles) {
+                    const titleMatch = article.name.match(/\d{8}_\d{6}_(.+)\.md$/);
+                    const title = titleMatch ? decodeURIComponent(titleMatch[1].replace(/-/g, ' ')) : article.name;
+                    const date = article.name.substring(0, 8).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+                    
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <article>
+                            <h3><a href="/articles/article.html?file=${article.name}">${title}</a></h3>
+                            <time class="article-date" datetime="${date}">${date}</time>
+                        </article>
+                    `;
+                    articlesList.appendChild(li);
+                }
+            } catch (error) {
+                console.error('Error loading articles:', error);
+            }
+        }
+
+        // 加载最新文章
+        loadLatestArticles();
+    </script>
 </body>
 </html> 
