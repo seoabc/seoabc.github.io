@@ -364,7 +364,7 @@
 
     <div class="article-container">
         <article class="article-card" itemscope itemtype="http://schema.org/BlogPosting">
-            <div class="article-cover" id="article-cover"></div>
+            <div class="article-cover" id="article-cover" style="display: none;"></div>
             
             <header class="article-header">
                 <h1 class="article-title" itemprop="headline" id="article-title"></h1>
@@ -493,6 +493,15 @@
                 document.getElementById('article-views').textContent = metadata.views || 0;
                 document.getElementById('article-likes').textContent = metadata.likes || 0;
                 document.getElementById('article-comments').textContent = metadata.comments || 0;
+
+                // 只在有封面图时显示封面
+                const coverElement = document.getElementById('article-cover');
+                if (metadata.cover) {
+                    coverElement.style.backgroundImage = `url(${metadata.cover})`;
+                    coverElement.style.display = 'block';
+                } else {
+                    coverElement.style.display = 'none';
+                }
 
                 // 渲染文章内容
                 const articleContent = marked.parse(markdown);
