@@ -3,11 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
     <meta name="description" content="" id="meta-description">
-    <meta name="keywords" content="编程学习,博客,技术分享">
+    <meta name="keywords" content="编程学习,博客,技术分享" id="meta-keywords">
+    <meta name="author" content="" id="meta-author">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph Tags -->
     <meta property="og:title" content="" id="og-title">
     <meta property="og:description" content="" id="og-description">
     <meta property="og:type" content="article">
+    <meta property="og:url" content="" id="og-url">
+    <meta property="og:image" content="" id="og-image">
+    <meta property="article:published_time" content="" id="article-time">
+    <meta property="article:author" content="" id="article-author">
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="" id="twitter-title">
+    <meta name="twitter:description" content="" id="twitter-description">
+    <meta name="twitter:image" content="" id="twitter-image">
+    <!-- Schema.org 标记 -->
+    <script type="application/ld+json" id="article-schema">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "",
+        "description": "",
+        "author": {
+            "@type": "Person",
+            "name": ""
+        },
+        "datePublished": "",
+        "dateModified": "",
+        "publisher": {
+            "@type": "Organization",
+            "name": "编程学习笔记",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "/assets/images/logo.png"
+            }
+        }
+    }
+    </script>
     <link rel="canonical" href="" id="canonical-link">
     <title id="page-title"></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css">
@@ -200,19 +236,53 @@
     </style>
 </head>
 <body>
-    <nav class="breadcrumb">
-        <a href="/">首页</a>
-        <span>></span>
-        <a href="/articles">文章列表</a>
-        <span>></span>
-        <span id="article-title"></span>
+    <header class="site-header">
+        <h1 class="site-title">编程学习笔记</h1>
+        <p class="site-description">分享我的编程学习之路</p>
+        <nav class="main-nav">
+            <a href="/" aria-current="page">首页</a>
+            <a href="/articles">文章列表</a>
+            <a href="https://github.com/seoabc" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+    </header>
+
+    <nav class="breadcrumb" aria-label="breadcrumb">
+        <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="/" itemprop="item">
+                    <span itemprop="name">首页</span>
+                </a>
+                <meta itemprop="position" content="1">
+            </li>
+            <span>></span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="/articles" itemprop="item">
+                    <span itemprop="name">文章列表</span>
+                </a>
+                <meta itemprop="position" content="2">
+            </li>
+            <span>></span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" id="article-title"></span>
+                <meta itemprop="position" content="3">
+            </li>
+        </ol>
     </nav>
 
     <main class="article-section">
-        <article id="content">
+        <article id="content" itemscope itemtype="https://schema.org/BlogPosting">
             <div id="loading">加载中...</div>
         </article>
     </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2024 编程学习笔记. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="/sitemap.xml">网站地图</a>
+            <a href="/rss.xml">RSS订阅</a>
+            <a href="/archives">归档</a>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js"></script>
@@ -279,9 +349,44 @@
                 document.getElementById('page-title').textContent = metadata.title;
                 document.getElementById('article-title').textContent = metadata.title;
                 document.getElementById('meta-description').content = metadata.description;
-                document.getElementById('og-title').content = `${metadata.title} - 编程学习笔记`;
+                document.getElementById('meta-keywords').content = metadata.tags;
+                document.getElementById('meta-author').content = metadata.author;
+                
+                // 更新 Open Graph 标签
+                document.getElementById('og-title').content = metadata.title;
                 document.getElementById('og-description').content = metadata.description;
-                document.getElementById('canonical-link').href = window.location.href;
+                document.getElementById('og-url').content = window.location.href;
+                document.getElementById('og-image').content = metadata.cover || '';
+                
+                // 更新 Twitter Card 标签
+                document.getElementById('twitter-title').content = metadata.title;
+                document.getElementById('twitter-description').content = metadata.description;
+                document.getElementById('twitter-image').content = metadata.cover || '';
+                
+                // 更新 Schema.org 数据
+                const schema = {
+                    "@context": "https://schema.org",
+                    "@type": "BlogPosting",
+                    "headline": metadata.title,
+                    "description": metadata.description,
+                    "author": {
+                        "@type": "Person",
+                        "name": metadata.author
+                    },
+                    "datePublished": metadata.date,
+                    "dateModified": metadata.date,
+                    "image": metadata.cover || '',
+                    "keywords": metadata.tags,
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "编程学习笔记",
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": "/assets/images/logo.png"
+                        }
+                    }
+                };
+                document.getElementById('article-schema').textContent = JSON.stringify(schema);
 
                 // 渲染文章内容
                 const articleContent = marked.parse(markdown);
