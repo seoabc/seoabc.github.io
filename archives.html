@@ -156,8 +156,8 @@
         <p class="site-description">分享我的编程学习之路</p>
         <nav class="main-nav">
             <a href="/">首页</a>
-            <a href="/articles">文章列表</a>
-            <a href="/archives" aria-current="page">归档</a>
+            <a href="/list.html">文章列表</a>
+            <a href="/archives.html" aria-current="page">归档</a>
             <a href="https://github.com/seoabc" target="_blank" rel="noopener">GitHub</a>
         </nav>
     </header>
@@ -260,7 +260,7 @@
                                                         ${article.date.split('-').slice(1).join('-')}
                                                     </time>
                                                     <h4 class="article-title">
-                                                        <a href="/articles/${article.fileName.replace('.md', '.html')}">
+                                                        <a href="/articles/article.html?file=${article.fileName}">
                                                             ${article.title}
                                                         </a>
                                                     </h4>
