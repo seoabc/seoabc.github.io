@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SEOABC:分享站长必备技能、建站工具、优化技巧、SEO优化指南">
+    <meta name="keywords" content="SEO,SEO优化,SEO工具,SEOABC,站长工具,流量统计,蜘蛛池统计,SEO优化指南，SEO插件">
+    <meta property="og:title" content="SEO站长工具-SEO优化最佳实践-SEOABC">
+    <meta property="og:description" content="SEOABC:分享站长必备技能、建站工具、优化技巧、SEO优化指南">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://seoabc.github.io/">
+    <title>SEO站长工具-SEO优化最佳实践-SEOABC</title>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* 核心样式 */
+        body {
+            font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 10px 20px;
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .breadcrumb span {
+            color: #999;
+            margin: 0 5px;
+        }
+        /* 页头样式 */
+        .site-header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .site-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .site-description {
+            color: #666;
+            font-size: 1.1em;
+        }
+        /* 导航栏 */
+        .main-nav {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .main-nav a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 0 5px;
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .main-nav a:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+        }
+        /* 文章列表 */
+        .article-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .article-list {
+            list-style: none;
+        }
+        .article-item {
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .article-item:last-child {
+            border-bottom: none;
+        }
+        .article-title {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+        .article-title a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .article-title a:hover {
+            color: #3498db;
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .article-excerpt {
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        /* 页脚 */
+        .site-footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .footer-links {
+            margin-top: 10px;
+        }
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        /* 添加标签样式 */
+        .article-tags {
+            margin-top: 10px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 4px 4px 0;
+            background-color: #f0f2f5;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        .article-author {
+            margin-left: 10px;
+            color: #666;
+        }
+        /* 悬浮导读样式 */
+        .floating-nav {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: auto;
+            background: white;
+            padding: 10px 0;
+            border-radius: 8px 0 0 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            writing-mode: vertical-lr;
+            cursor: pointer;
+        }
+        
+        .floating-nav:hover {
+            width: 240px;
+            writing-mode: horizontal-tb;
+            padding: 20px;
+        }
+        
+        .floating-nav h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .nav-categories {
+            display: none;
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        
+        .floating-nav:hover .nav-categories {
+            display: block;
+        }
+        
+        .nav-category {
+            margin-bottom: 15px;
+        }
+        
+        .category-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .category-items {
+            list-style: none;
+            padding-left: 10px;
+        }
+        
+        .category-items li {
+            margin: 5px 0;
+        }
+        
+        .category-items a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+        
+        .category-items a:hover {
+            background: #f5f5f5;
+            color: #3498db;
+        }
+        
+        .category-count {
+            float: right;
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        /* 媒体查询保持不变 */
+        @media (max-width: 1200px) {
+            .floating-nav {
+                display: none;
+            }
+        }
+
+        .article-stats {
+            margin-left: 15px;
+            color: #666;
+        }
+
+        .article-stats span {
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+
+        .article-stats .views::before {
+            content: '👁 ';
+        }
+
+        .article-stats .likes::before {
+            content: '👍 ';
+        }
+
+        .article-stats .comments::before {
+            content: '💬 ';
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* 分页样式 */
+        .pagination {
+            margin-top: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .pagination button {
+            padding: 8px 16px;
+            border: none;
+            background-color: white;
+            color: #666;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            background-color: #e8f4fc;
+            color: #3498db;
+        }
+        
+        .pagination button:disabled {
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .pagination .current-page {
+            margin: 0 15px;
+            line-height: 36px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <nav class="breadcrumb">
+        <span>当前位置：</span>
+        <a href="/" aria-current="page">首页</a>
+    </nav>
+
+    <header class="site-header">
+        <h1 class="site-title">SEO优化最佳实践-SEOABC</h1>
+        <p class="site-description">分享站长必备技能、建站工具、优化技巧、SEO优化指南</p>
+        <nav class="main-nav">
+            <a href="/" aria-current="page">首页</a>
+            <a href="/archives.html">归档</a>
+            <a href="https://wsoo.me" target="_blank" rel="noopener">SEO站长工具</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="article-section">
+            <h2>最新文章</h2>
+            <ul class="article-list" id="article-list">
+                <li class="article-item">
+                    <div id="loading">加载文章中...</div>
+                </li>
+            </ul>
+            <div class="pagination" id="pagination">
+                <button id="prev-page" disabled>上一页</button>
+                <span class="current-page">第 <span id="current-page-num">1</span> 页</span>
+                <button id="next-page" disabled>下一页</button>
+            </div>
+        </section>
+    </main>
+
+    <aside class="floating-nav" id="nav">
+        <h3>导航分类</h3>
+        <ul class="nav-categories" id="nav-categories">
+            <!-- 分类将通过 JavaScript 动态生成 -->
+        </ul>
+    </aside>
+
+    <footer class="site-footer">
+        <p>&copy; 最新SEO优化最佳实践指南百科. 未经授权.切勿转载.</p>
+        <div class="footer-links">
+            <a href="/sitemap.xml">网站地图</a>
+            <a href="/rss.xml">RSS订阅</a>
+            <a href="/archives">归档</a>
+        </div>
+    </footer>
+
+    <script>
+        const config = {
+            owner: 'seoabc',
+            repo: 'seoabc.github.io',
+            pageSize: 10,
+            currentPage: 1
+        };
+        
+        let allArticles = [];
+
+        async function loadLatestArticles() {
+            try {
+                console.log('开始加载文章...');
+                const response = await fetch(
+                    `https://api.github.com/repos/${config.owner}/${config.repo}/contents/articles`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API 响应错误: ${response.status}`);
+                }
+                
+                const files = await response.json();
+                console.log('获取到文件列表:', files);
+                
+                const articles = files.filter(file => file.name.endsWith('.md'));
+                console.log('Markdown 文件:', articles);
+                
+                if (articles.length === 0) {
+                    document.getElementById('article-list').innerHTML = 
+                        '<li class="article-item">暂无文章</li>';
+                    return;
+                }
+
+                const articlesList = document.getElementById('article-list');
+                articlesList.innerHTML = '';
+                
+                for (const article of articles) {
+                    try {
+                        console.log('正在加载文章:', article.name);
+                        const contentResponse = await fetch(article.download_url);
+                        
+                        if (!contentResponse.ok) {
+                            throw new Error(`无法加载文章内容: ${contentResponse.status}`);
+                        }
+                        
+                        const content = await contentResponse.text();
+                        console.log('文章内容:', content.substring(0, 100) + '...');
+                        
+                        // 解析 YAML front matter
+                        const frontMatter = {};
+                        const matches = content.match(/^---([\s\S]*?)---/);
+                        
+                        if (matches) {
+                            const yaml = matches[1];
+                            yaml.split('\n').forEach(line => {
+                                if (line.trim()) {  // 忽略空行
+                                    const colonIndex = line.indexOf(':');
+                                    if (colonIndex !== -1) {
+                                        const key = line.slice(0, colonIndex).trim();
+                                        const value = line.slice(colonIndex + 1).trim();
+                                        frontMatter[key] = value;
+                                    }
+                                }
+                            });
+                        }
+                        
+                        console.log('解析的 front matter:', frontMatter);
+
+                        const li = document.createElement('li');
+                        li.className = 'article-item';
+                        li.innerHTML = `
+                            <article itemscope itemtype="http://schema.org/BlogPosting">
+                                <h3 class="article-title">
+                                    <a href="/articles/${article.name.replace('.md', '.html')}" itemprop="headline url">
+                                        ${frontMatter.title || article.name}
+                                    </a>
+                                </h3>
+                                
+                                <div class="article-meta">
+                                    <time datetime="${frontMatter.date}" itemprop="datePublished dateModified">
+                                        ${frontMatter.date}
+                                    </time>
+                                    <span class="article-author">
+                                        作者：${frontMatter.author || '博主'}
+                                    </span>
+                                    <span class="article-stats">
+                                        <span class="views">阅读：${frontMatter.views || 0}</span>
+                                        <span class="likes">点赞：${frontMatter.likes || 0}</span>
+                                        <span class="comments">评论：${frontMatter.comments || 0}</span>
+                                    </span>
+                                </div>
+                                
+                                <p class="article-excerpt">
+                                    ${frontMatter.description || ''}
+                                </p>
+                                
+                                <div class="article-tags">
+                                    ${(frontMatter.tags || '').split(',').map(tag => 
+                                        `<span class="tag">${tag.trim()}</span>`
+                                    ).join('')}
+                                </div>
+                            </article>
+                        `;
+                        articlesList.appendChild(li);
+                    } catch (articleError) {
+                        console.error('加载单篇文章时出错:', articleError);
+                        continue;  // 继续处理下一篇文章
+                    }
+                }
+
+                // 更新导航分类
+                const categories = {
+                    '最新文章': articles.slice(0, 5)
+                };
+
+                // 根据文章的 category 属性进行分类
+                articles.forEach(article => {
+                    try {
+                        const content = article.content || '';
+                        const categoryMatch = content.match(/category:\s*(.*)/);
+                        if (categoryMatch) {
+                            const category = categoryMatch[1].trim();
+                            if (!categories[category]) {
+                                categories[category] = [];
+                            }
+                            categories[category].push(article);
+                        }
+                    } catch (error) {
+                        console.error('处理分类时出错:', error);
+                    }
+                });
+
+                const navCategories = document.getElementById('nav-categories');
+                navCategories.innerHTML = '';
+                
+                Object.entries(categories).forEach(([category, items]) => {
+                    if (items.length > 0) {
+                        const li = document.createElement('li');
+                        li.className = 'nav-category';
+                        li.innerHTML = `
+                            <div class="category-title">
+                                ${category}
+                                <span class="category-count">${items.length}</span>
+                            </div>
+                            <ul class="category-items">
+                                ${items.map(article => {
+                                    const title = article.frontMatter?.title || article.name;
+                                    return `
+                                        <li>
+                                            <a href="/articles/${article.name.replace('.md', '.html')}">
+                                                ${title}
+                                            </a>
+                                        </li>
+                                    `;
+                                }).join('')}
+                            </ul>
+                        `;
+                        navCategories.appendChild(li);
+                    }
+                });
+
+                // 在加载完所有文章后
+                allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                renderArticles(1);
+                updatePagination();
+
+            } catch (error) {
+                console.error('加载文章列表时出错:', error);
+                document.getElementById('article-list').innerHTML = 
+                    `<li class="article-item">加载文章失败: ${error.message}</li>`;
+            }
+        }
+
+        function renderArticles(page) {
+            const start = (page - 1) * config.pageSize;
+            const end = start + config.pageSize;
+            const pageArticles = allArticles.slice(start, end);
+            
+            // 渲染文章列表
+            const articlesList = document.getElementById('article-list');
+            articlesList.innerHTML = pageArticles.map(article => `
+                <li class="article-item">
+                    <div id="loading">加载文章中...</div>
+                </li>
+            `).join('');
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(allArticles.length / config.pageSize);
+            const prevButton = document.getElementById('prev-page');
+            const nextButton = document.getElementById('next-page');
+            const currentPageNum = document.getElementById('current-page-num');
+            
+            prevButton.disabled = config.currentPage === 1;
+            nextButton.disabled = config.currentPage === totalPages;
+            currentPageNum.textContent = config.currentPage;
+            
+            prevButton.onclick = () => {
+                if (config.currentPage > 1) {
+                    config.currentPage--;
+                    renderArticles(config.currentPage);
+                    updatePagination();
+                }
+            };
+            
+            nextButton.onclick = () => {
+                if (config.currentPage < totalPages) {
+                    config.currentPage++;
+                    renderArticles(config.currentPage);
+                    updatePagination();
+                }
+            };
+        }
+
+        // 加载最新文章
+        loadLatestArticles();
+    </script>
+</body>
+</html> 
